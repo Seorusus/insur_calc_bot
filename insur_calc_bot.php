@@ -1,5 +1,13 @@
 <?php
 
+include_once 'Telegram.php';
+
+/* If you need to manually take some parameters
+*  $result = $telegram->getData();
+*  $text = $result["message"] ["text"];
+*  $chat_id = $result["message"] ["chat"]["id"];
+*/
+
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -9,17 +17,13 @@ define("TG_TOKEN", "6105452476:AAG7oUTA6TA7koYsOQ2zmQCO-_76fi3LPFE");
 define("TG_USER_ID", "-728206168");
 define("CHAT_ID", "@ins_calc_group");
 
-/* для отправки текстовых сообщений */
-function TG_sendMessage($getQuery) {
-    $ch = curl_init("https://api.telegram.org/bot". TG_TOKEN ."/sendMessage?" . http_build_query($getQuery));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-    curl_setopt($ch, CURLOPT_HEADER, false);
-    $res = curl_exec($ch);
-    curl_close($ch);
+// Instances the class
+$telegram = new Telegram(TG_TOKEN);
 
-    return $res;
-}
+// Take text and chat_id from the message
+$text = $telegram->Text();
+$chat_id = $telegram->ChatID();
+$result = $telegram->getData();
 
 /* для отправки изображений */
 function TG_sendPhoto($arrayQuery) {
@@ -54,7 +58,7 @@ function list_files($path) {
         $path .= '/';
     }
 
-    $files = array();
+    $files = [];
     $dh = opendir($path);
     while (false !== ($file = readdir($dh))) {
         if ($file != '.' && $file != '..' && !is_dir($path.$file) && $file[0] != '.') {
@@ -96,46 +100,46 @@ var_dump($chatId);
 /* ============================================ */
 
 // Send Invite.
-
-$textMessage = '🎯🎯🎯';
-if (!$arrDataAnswer['message']) {
-    $arrayQuery = array(
-        'chat_id'       => CHAT_ID,
-        'text'          => $textMessage,
-        'parse_mode'    => "html",
-        'reply_markup' => json_encode([
-            'keyboard' => [
-                [
+if ($telegram->messageFromGroup()) {
+    $textMessage = '🎯🎯🎯';
+    if (!$arrDataAnswer['message']) {
+        $content = [
+            'chat_id' => CHAT_ID,
+            'text' => $textMessage,
+            'parse_mode' => "html",
+            'reply_markup' => json_encode([
+                'keyboard' => [
                     [
-                        'text' => 'Страховий калькулятор',
-                    ],
-                    [
-                        'text' => 'Отримати онлайн консультацию',
+                        [
+                            'text' => 'Страховий калькулятор',
+                        ],
+                        [
+                            'text' => 'Отримати онлайн консультацию',
+                        ],
                     ],
                 ],
-            ],
-            'is_persistent' => true,
-            'one_time_keyboard' => false,
-            'resize_keyboard' => true,
-        ]),
-    );
-    TG_sendMessage($arrayQuery);
+                'is_persistent' => true,
+                'one_time_keyboard' => false,
+                'resize_keyboard' => true,
+            ]),
+        ];
+        $telegram->sendMessage($content);
+    }
 }
-
-
-
 
 if ($arrDataAnswer['message']) {
     if ($arrDataAnswer['message']['text'] === "Страховий калькулятор") {
-        $arrayQuery = array(
+        $content = [
             'chat_id' => CHAT_ID,
-            'text' => "Перейти до страхового калькулятора",
+            'text' =>
+                "Бот <b>'Страховий калькулятор'</b> познайомить Вас із програмами австрійської страхової компанії Grawe та допоможе Вам зробити 
+<b><i>розрахунок страховки.</i></b>",
             'parse_mode' => "html",
             'reply_markup' => json_encode([
                 'inline_keyboard' => [
                     [
                         [
-                            'text' => 'insurance_calc_bot',
+                            'text' => 'Перейти до Страхового калькулятора',
                             'url' => 'https://t.me/insurance_calc_bot',
                         ],
                     ]
@@ -144,18 +148,18 @@ if ($arrDataAnswer['message']) {
                 'one_time_keyboard' => false,
                 'resize_keyboard' => true,
             ]),
-        );
-        TG_sendMessage($arrayQuery);
+        ];
+        $telegram->sendMessage($content);
     } elseif ($arrDataAnswer['message']['text'] === "Отримати онлайн консультацию") {
-        $arrayQuery = array(
+        $content = [
             'chat_id' => $chatId,
-            'text' => "Звернутись до експерта Лариси Лончар",
+            'text' => "Ви можете безпосередньо поставити запитання щодо страхових програм та отримати безкоштовну консультацію <b>експерта</b>.",
             'parse_mode' => "html",
             'reply_markup' => json_encode([
                 'inline_keyboard' => [
                     [
                         [
-                            'text' => 'larisa_lonchar',
+                            'text' => 'Звернутись до експерта Лариси Лончар',
                             'url' => 'https://t.me/larisa_lonchar',
                         ],
                     ]
@@ -164,32 +168,49 @@ if ($arrDataAnswer['message']) {
             'one_time_keyboard' => false,
             'resize_keyboard' => true,
         ]),
-        );
-        TG_sendMessage($arrayQuery);
+        ];
+        $telegram->sendMessage($content);
     }
 }
 
 /* ================================================== */
 
-//
-//$chat_id = $telegram->ChatID();
-//$text = $telegram->Text();
-// $result = $telegram->getData();
-// $text = $result['message'] ['text'];
-// $content = [
-// 	'chat_id' => $chat_id, 'text' => 'Привiт',
-// ];
-// $telegram->sendMessage($content);
+// Check if the text is a command.
+if (!$telegram->messageFromGroup()) {
+    if (!is_null($text) && !is_null($chat_id)) {
+        if ($text === '/start') {
+        $text = $result['message'] ['text'];
+            // Shows the Inline Keyboard and Trigger a callback on a button press
+            $option = [
+                [
+                    'Покажи які є страхові програми',
+                    'Давай зробимо розрахунок страхової виплати'
+                ],
+            ];
 
-//if($text === '/start') {
-//	$option = array(
-//    //First row
-//    array($telegram->buildKeyboardButton("Button 1", true, true), $telegram->buildKeyboardButton("Button 2")),
-//    //Second row
-//    array($telegram->buildKeyboardButton("Button 3"), $telegram->buildKeyboardButton("Button 4"), $telegram->buildKeyboardButton("Button 5")),
-//    //Third row
-//    array($telegram->buildKeyboardButton("Button 6")));
-//$keyb = $telegram->buildKeyBoard($option, $onetime=true);
-//$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "This is a Keyboard Test");
-//$telegram->sendMessage($content);
-//}
+            $keyb = $telegram->buildKeyBoard($option, true, true, false);
+            $content = [
+                'chat_id' => $chat_id,
+                'reply_markup' => $keyb,
+                'parse_mode' => "html",
+                'text' => "<b>Чудово</b>,\nВибери з чого почнемо.",
+                ];
+            $telegram->sendMessage($content);
+        }
+
+        if ($text === 'Покажи які є страхові програми') {
+            if (!$telegram->messageFromGroup()) {
+                $reply = 'Дивись';
+            }
+            // Create option for the custom keyboard. Array of array string
+            $option = [['A', 'B'], ['C', 'D']];
+            // Get the keyboard
+            $keyb = $telegram->buildKeyBoard($option, true, true, false);
+            $content = ['chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => $reply];
+            $telegram->sendMessage($content);
+        }
+
+
+    }
+}
+/* ================================================== */

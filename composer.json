@@ -13,8 +13,9 @@
     "require": {
         "php": ">=5.0",
         "ext-json": "*",
-        "ext-curl": "*"
-    },
+        "ext-curl": "*",
+			"ext-mbstring": "*"
+		},
     "autoload": {
         "files": ["Telegram.php", "TelegramErrorLogger.php"]
     }
