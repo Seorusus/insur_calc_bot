@@ -53,6 +53,7 @@ $telegram = new Telegram(TG_TOKEN);
 $text = $telegram->Text();
 $chat_id = $telegram->ChatID();
 $result = $telegram->getData();
+$callback_query = $telegram->Callback_Query();
 
 /* для отправки изображений */
 function tgSendPhoto($arrayQuery) {
@@ -103,7 +104,7 @@ function listFiles($path) {
 
 /* Writing to message.txt */
 function writeLogFile($string, $clear = false) {
-    $logFileName = __DIR__."/message.txt";
+    $logFileName = __DIR__."/message.json";
     $now = date("Y-m-d H:i:s");
 
     if ($clear === 'false') {
@@ -117,14 +118,13 @@ function writeLogFile($string, $clear = false) {
 $data = file_get_contents('php://input');
 writeLogFile($data, true);
 
-echo file_get_contents(__DIR__."/message.txt");
+echo file_get_contents(__DIR__."/message.json");
 
 /* ============================================ */
 
 $arrDataAnswer = json_decode($data, true);
 $textMessage = mb_strtolower($arrDataAnswer["message"]["text"]);
 $chatId = $arrDataAnswer["message"]["chat"]["id"];
-var_dump($chatId);
 
 /* ============================================ */
 //$test = $data['channel_post']['chat']['type'];
@@ -203,6 +203,98 @@ if ($arrDataAnswer['message']) {
         ];
         $telegram->sendMessage($content);
     }
+}
+
+if (!empty($callback_query['data'])) {
+    if ($callback_query['data'] === 'back_menu') {
+        $option = [
+            [
+                SHOW_INS_PROGRAMS,
+                CALCULATION,
+            ],
+        ];
+
+        $keyb = $telegram->buildKeyBoard($option, true, true, false);
+        $name = $telegram->FirstName();
+        $content = [
+            'chat_id' => $chat_id,
+            'reply_markup' => $keyb,
+            'parse_mode' => "html",
+            'text' => "Добре, $name, давайте з початку)",
+        ];
+        $telegram->sendMessage($content);
+
+    }
+
+    if ($callback_query['data'] === 'continue_sep') {
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => 'Укажiть стать',
+            'parse_mode' => "html",
+            'reply_markup' => json_encode([
+                'inline_keyboard' => [
+                    [
+                        [
+                            'text' => 'Жiноча',
+                            'callback_data' => 'woman',
+                        ],
+                        [
+                            'text' => 'Чоловiча',
+                            'callback_data' => 'man',
+                        ],
+                    ]
+                ],
+                'is_persistent' => true,
+                'one_time_keyboard' => false,
+                'resize_keyboard' => true,
+            ]),
+        ];
+        $telegram->sendMessage($content);
+  }
+
+    $messageId = $callback_query['message']['message_id'];
+    $state = $callback_query['data'];
+    if ($state === 'woman') {
+        $stateName = 'Жiноча';
+    } elseif ($state === 'man') {
+        $stateName = 'Чоловiча';
+    }
+
+    if ($state === 'woman' || $state === 'man') {
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => 'Ваша стать - <b>' . $stateName . '</b>.
+
+👇 Далi введіть вік на початку страхування.
+<i>* Мінімальний вік для страхування – 15 років.</i>',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+        $telegram->sendMessage($content);
+
+    }
+}
+
+/* ==================================================
+ * Replay to age request.
+*/
+
+$ReplyToMessageID = $result['message']['reply_to_message']['message_id'];
+$messageId = $callback_query['message']['message_id'];
+
+$age = $text;
+if ($ReplyToMessageID) {
+    $content = [
+        'chat_id' => $chat_id,
+        'text' => 'Ваш вiк - <b>' . $age . '</b>.
+
+👇 Далi введіть ...',
+        'parse_mode' => "html",
+        'reply_to_message_id' => $messageId,
+        'reply_markup' => $telegram->buildForceReply(),
+    ];
+    $telegram->sendMessage($content);
 }
 
 /* ================================================== */
@@ -1368,6 +1460,58 @@ RX-1. Страхування настання ризиків можна прид
                     $telegram->sendMessage($content);
                 }
                 break;
+            case CALCULATION_PROG . " " . SEP:
+                if (!$telegram->messageFromGroup()) {
+                    $reply = "Для розрахунку <b>" .SEP . "</b> мені знадобляться деякі дані про Вас.
+<i>Продовжимо</i>?";
+
+                    // Create option for the custom keyboard. Array of array string
+                    $option = [
+                        [CALCULATION_PROG . " " . SEP],
+                        [CONSULTATION],
+                    ];
+                    // Get the keyboard
+                    $keyb = $telegram->buildKeyBoard($option, true, true, false);
+                    $content = [
+                        'chat_id' => $chat_id,
+                        'reply_markup' => $keyb,
+                        'text' => $reply,
+                        'parse_mode' => "html",
+                    ];
+                    $telegram->sendMessage($content);
+
+                    // Continue Yes.
+                    $reply = '👇';
+                    $content = [
+                        'chat_id' => $chat_id,
+                        'reply_markup' => json_encode([
+                            'inline_keyboard' => [
+                                [
+                                    [
+                                        'text' => "Так",
+                                        'callback_data' => 'continue_sep',
+                                    ],
+
+                                ],
+                                [
+                                    [
+                                    'text' => "Повернутись до головного меню",
+                                    'callback_data' => 'back_menu',
+                                        ],
+                                ],
+
+                            ],
+                            'is_persistent' => false,
+                            'one_time_keyboard' => false,
+                            'resize_keyboard' => false,
+                        ]),
+                        'text' => $reply,
+                        'parse_mode' => "html",
+                    ];
+                    $telegram->sendMessage($content);
+
+                }
+                break;
 
             default:
                 break;
@@ -1393,6 +1537,7 @@ RX-1. Страхування настання ризиків можна прид
                 ]),
             ];
             $telegram->sendMessage($content);
+
 
         }
 
