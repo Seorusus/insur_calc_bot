@@ -263,38 +263,134 @@ if (!empty($callback_query['data'])) {
     if ($state === 'woman' || $state === 'man') {
         $content = [
             'chat_id' => $chat_id,
-            'text' => 'Ваша стать - <b>' . $stateName . '</b>.
-
-👇 Далi введіть вік на початку страхування.
-<i>* Мінімальний вік для страхування – 15 років.</i>',
+            'text' => 'Ваша стать - <b>' . $stateName . '</b>.',
             'parse_mode' => "html",
             'reply_to_message_id' => $messageId,
             'reply_markup' => $telegram->buildForceReply(),
         ];
         $telegram->sendMessage($content);
 
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => '👇 Далi введіть вік на початку страхування. 👇
+<i>* Мінімальний вік для страхування – 15 років.
+* Максiмальний вік для страхування – 60 років.</i>',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+
+
+//        $option = [
+//            [
+//                $telegram->buildInlineKeyBoardButton(
+//                    '👇 Далi введіть вік на початку страхування. 👇',
+//                    $url = '',
+//                    $callback_data = 'age'),
+//            ],
+//        ];
+        $telegram->sendMessage($content);
+
     }
 }
 
-/* ==================================================
- * Replay to age request.
-*/
+/* ================================================== */
 
 $ReplyToMessageID = $result['message']['reply_to_message']['message_id'];
 $messageId = $callback_query['message']['message_id'];
 
 $age = $text;
 if ($ReplyToMessageID) {
+    // Response to age request.
     $content = [
         'chat_id' => $chat_id,
-        'text' => 'Ваш вiк - <b>' . $age . '</b>.
-
-👇 Далi введіть ...',
+        'text' => '👇',
         'parse_mode' => "html",
         'reply_to_message_id' => $messageId,
         'reply_markup' => $telegram->buildForceReply(),
     ];
     $telegram->sendMessage($content);
+
+    $ageFormated = number_format($age);
+    if ($ageFormated >= 15 && $ageFormated <= 60) {
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => 'Ваш вiк, повних рокiв - <b>' . $ageFormated . '</b>.',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+        $telegram->sendMessage($content);
+
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => '👇 Далi введіть термiн дії страховки 👇
+
+<i>* Мінімальний термін страхування 10 років
+* Максiмальний термін страхування 30 років</i>',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+        $telegram->sendMessage($content);
+
+    } else {
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => 'Необхідно ввести повне число від 15 до 60',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+        $telegram->sendMessage($content);
+    }
+
+    $duration = $text;
+    $durationFormated = number_format($duration);
+    if ($durationFormated >= 10 && $durationFormated <= 30) {
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => 'Ваш термін страхування, рокiв - <b>' . $durationFormated . '</b>.',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+        $telegram->sendMessage($content);
+
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => '👇',
+            'parse_mode' => "html",
+        ];
+        $telegram->sendMessage($content);
+
+        $option = [
+            [
+                $telegram->buildInlineKeyBoardButton('ГРН', $url = '', $callback_data = 'hrivna'),
+                $telegram->buildInlineKeyBoardButton('Доллар США', $url = '', $callback_data = 'dollar'),
+            ],
+        ];
+
+        $keyb = $telegram->buildInlineKeyBoard($option);
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => '👇 Далi, будьласка, оберiть валюту страховки 👇',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $keyb,
+        ];
+        $telegram->sendMessage($content);
+
+    } else {
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => 'Необхідно ввести повне число від 10 до 30',
+            'parse_mode' => "html",
+            'reply_to_message_id' => $messageId,
+            'reply_markup' => $telegram->buildForceReply(),
+        ];
+        $telegram->sendMessage($content);
+    }
 }
 
 /* ================================================== */
