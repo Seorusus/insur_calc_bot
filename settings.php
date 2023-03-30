@@ -1,11 +1,10 @@
 <?php
 
-
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-/* Settings */
+/* Constant Settings */
 define("INS_CALCULATOR", "🧮 Страховий калькулятор", true);
 define("CALL_LORA", "💬 Звернутись до експертки Лариси Лончар", true);
 define("CONSULTATION", "💬 Отримати консультацiю експерта", true);
@@ -34,7 +33,7 @@ define("OTHER_PERS_PROGRAMS", "⬇️⬇️⬇️ Iншi програми Осо
 define("GRAVE_MEDIC_ACCUMULATION", "➕ ГРАВЕ Медик - Накопичувальна програма", true);
 define("GRAVE_MEDIC_RISK_INS", "❗ ГРАВЕ Медик - Страхування настання ризиків", true);
 
-
+/* Telegram Settings */
 define("TG_TOKEN", "6105452476:AAG7oUTA6TA7koYsOQ2zmQCO-_76fi3LPFE", true);
 define("TG_USER_ID", "-728206168", true);
 define("CHAT_ID", "@ins_calc_group", true);

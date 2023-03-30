@@ -66,10 +66,10 @@ function writeLogFile($string, $clear = false) {
     $now = date("Y-m-d H:i:s");
 
     if ($clear === 'false') {
-        file_put_contents($logFileName, $now." ".print_r($string, true)."\r\n", FILE_APPEND);
+        file_put_contents($logFileName, ''." ".print_r($string, true)."\r\n", FILE_APPEND);
     } else {
         file_put_contents($logFileName, '');
-        file_put_contents($logFileName, $now." ".print_r($string, true)."\r\n", FILE_APPEND);
+        file_put_contents($logFileName, '' . " ".print_r($string, true)."\r\n", FILE_APPEND);
     }
 }
 
@@ -1348,58 +1348,6 @@ RX-1. Страхування настання ризиків можна прид
                     $telegram->sendMessage($content);
                 }
                 break;
-            case CALCULATION_PROG . " " . SEP:
-                if (!$telegram->messageFromGroup()) {
-                    $reply = "Для розрахунку <b>" .SEP . "</b> мені знадобляться деякі дані про Вас.
-<i>Продовжимо</i>?";
-
-                    // Create option for the custom keyboard. Array of array string
-                    $option = [
-                        [CALCULATION_PROG . " " . SEP],
-                        [CONSULTATION],
-                    ];
-                    // Get the keyboard
-                    $keyb = $telegram->buildKeyBoard($option, true, true, false);
-                    $content = [
-                        'chat_id' => $chat_id,
-                        'reply_markup' => $keyb,
-                        'text' => $reply,
-                        'parse_mode' => "html",
-                    ];
-                    $telegram->sendMessage($content);
-
-                    // Continue Yes.
-                    $reply = '👇';
-                    $content = [
-                        'chat_id' => $chat_id,
-                        'reply_markup' => json_encode([
-                            'inline_keyboard' => [
-                                [
-                                    [
-                                        'text' => "Так",
-                                        'callback_data' => 'continue_sep',
-                                    ],
-
-                                ],
-                                [
-                                    [
-                                    'text' => "Повернутись до головного меню",
-                                    'callback_data' => 'back_menu',
-                                        ],
-                                ],
-
-                            ],
-                            'is_persistent' => false,
-                            'one_time_keyboard' => false,
-                            'resize_keyboard' => false,
-                        ]),
-                        'text' => $reply,
-                        'parse_mode' => "html",
-                    ];
-                    $telegram->sendMessage($content);
-
-                }
-                break;
 
             default:
                 break;
@@ -1428,9 +1376,6 @@ RX-1. Страхування настання ризиків можна прид
 
 
         }
-
-        /* ================================================== */
-
     }
 }
 /* ================================================== */
