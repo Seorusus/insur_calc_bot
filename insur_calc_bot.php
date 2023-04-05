@@ -3,6 +3,7 @@
 include_once 'Telegram.php';
 include_once 'calculator/calculator_sep.php';
 include_once 'settings.php';
+include_once 'invite_channel.php';
 
 // Instances the class
 $telegram = new Telegram(TG_TOKEN);
@@ -88,9 +89,9 @@ $chatId = $arrDataAnswer["message"]["chat"]["id"];
 //$test = $data['channel_post']['chat']['type'];
 
 // Send Invite.
-if ($telegram->messageFromGroup() || ($data['channel_post']['chat']['type'] !== 'channel')) {
+if ($telegram->messageFromGroup()) {
     if (is_null($chat_id)) {
-        $textMessage = '🎯🎯🎯';
+        $textMessage = 'Оберіть опцію:';
         if (!$arrDataAnswer['message']) {
             $content = [
                 'chat_id' => CHAT_ID,

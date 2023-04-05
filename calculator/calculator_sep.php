@@ -67,7 +67,7 @@ if ((!$telegram->messageFromGroup())
     $telegram->sendMessage($content);
 }
 
-if (!$telegram->messageFromGroup()) {
+//if (!$telegram->messageFromGroup()) {
     if (!empty($callback_query['data'])) {
         if ($callback_query['data'] === 'continue_sep') {
             $content = [
@@ -151,7 +151,7 @@ if (!$telegram->messageFromGroup()) {
         }
 
     }
-}
+//}
 
 
 /* ================================================== */

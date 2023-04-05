@@ -37,3 +37,5 @@ define("GRAVE_MEDIC_RISK_INS", "❗ ГРАВЕ Медик - Страхуванн
 define("TG_TOKEN", "6105452476:AAG7oUTA6TA7koYsOQ2zmQCO-_76fi3LPFE", true);
 define("TG_USER_ID", "-728206168", true);
 define("CHAT_ID", "@ins_calc_group", true);
+define("CHANNEL_ID", "-1001645561424", true);
+
