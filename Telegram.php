@@ -79,17 +79,12 @@ class Telegram
      * Constant for type Left Chat Member.
      */
     const LEFT_CHAT_MEMBER = 'left_chat_member';
-    /**
-     * Constant for type My Chat Member.
-     */
-    const MY_CHAT_MEMBER = 'my_chat_member';
 
     private $bot_token = '';
     private $data = [];
     private $updates = [];
     private $log_errors;
     private $proxy;
-    private $update_type;
 
     /// Class constructor
 
@@ -844,34 +839,21 @@ class Telegram
      */
     public function ChatID()
     {
-        $chat = $this->Chat();
-
-        return $chat['id'];
-    }
-
-    /**
-     * \return the Array chat.
-     */
-    public function Chat()
-    {
         $type = $this->getUpdateType();
         if ($type == self::CALLBACK_QUERY) {
-            return @$this->data['callback_query']['message']['chat'];
+            return @$this->data['callback_query']['message']['chat']['id'];
         }
         if ($type == self::CHANNEL_POST) {
-            return @$this->data['channel_post']['chat'];
+            return @$this->data['channel_post']['chat']['id'];
         }
         if ($type == self::EDITED_MESSAGE) {
-            return @$this->data['edited_message']['chat'];
+            return @$this->data['edited_message']['chat']['id'];
         }
         if ($type == self::INLINE_QUERY) {
-            return @$this->data['inline_query']['from'];
-        }
-        if ($type == self::MY_CHAT_MEMBER) {
-            return @$this->data['my_chat_member']['chat'];
+            return @$this->data['inline_query']['from']['id'];
         }
 
-        return $this->data['message']['chat'];
+        return $this->data['message']['chat']['id'];
     }
 
     /// Get the message_id of the current message
@@ -1113,7 +1095,6 @@ class Telegram
     }
 
     /// Get the contact phone number
-
     /**
      *  \return a String of the contact phone number.
      */
@@ -1711,100 +1692,57 @@ class Telegram
      */
     public function getUpdateType()
     {
-        if ($this->update_type) {
-            return $this->update_type;
-        }
-
         $update = $this->data;
         if (isset($update['inline_query'])) {
-            $this->update_type = self::INLINE_QUERY;
-
-            return $this->update_type;
+            return self::INLINE_QUERY;
         }
         if (isset($update['callback_query'])) {
-            $this->update_type = self::CALLBACK_QUERY;
-
-            return $this->update_type;
+            return self::CALLBACK_QUERY;
         }
         if (isset($update['edited_message'])) {
-            $this->update_type = self::EDITED_MESSAGE;
-
-            return $this->update_type;
+            return self::EDITED_MESSAGE;
         }
         if (isset($update['message']['text'])) {
-            $this->update_type = self::MESSAGE;
-
-            return $this->update_type;
+            return self::MESSAGE;
         }
         if (isset($update['message']['photo'])) {
-            $this->update_type = self::PHOTO;
-
-            return $this->update_type;
+            return self::PHOTO;
         }
         if (isset($update['message']['video'])) {
-            $this->update_type = self::VIDEO;
-
-            return $this->update_type;
+            return self::VIDEO;
         }
         if (isset($update['message']['audio'])) {
-            $this->update_type = self::AUDIO;
-
-            return $this->update_type;
+            return self::AUDIO;
         }
         if (isset($update['message']['voice'])) {
-            $this->update_type = self::VOICE;
-
-            return $this->update_type;
+            return self::VOICE;
         }
         if (isset($update['message']['contact'])) {
-            $this->update_type = self::CONTACT;
-
-            return $this->update_type;
+            return self::CONTACT;
         }
         if (isset($update['message']['location'])) {
-            $this->update_type = self::LOCATION;
-
-            return $this->update_type;
+            return self::LOCATION;
         }
         if (isset($update['message']['reply_to_message'])) {
-            $this->update_type = self::REPLY;
-
-            return $this->update_type;
+            return self::REPLY;
         }
         if (isset($update['message']['animation'])) {
-            $this->update_type = self::ANIMATION;
-
-            return $this->update_type;
+            return self::ANIMATION;
         }
         if (isset($update['message']['sticker'])) {
-            $this->update_type = self::STICKER;
-
-            return $this->update_type;
+            return self::STICKER;
         }
         if (isset($update['message']['document'])) {
-            $this->update_type = self::DOCUMENT;
-
-            return $this->update_type;
+            return self::DOCUMENT;
         }
         if (isset($update['message']['new_chat_member'])) {
-            $this->update_type = self::NEW_CHAT_MEMBER;
-
-            return $this->update_type;
+            return self::NEW_CHAT_MEMBER;
         }
         if (isset($update['message']['left_chat_member'])) {
-            $this->update_type = self::LEFT_CHAT_MEMBER;
-
-            return $this->update_type;
-        }
-        if (isset($update['my_chat_member'])) {
-            $this->update_type = self::MY_CHAT_MEMBER;
-
-            return $this->update_type;
+            return self::LEFT_CHAT_MEMBER;
         }
         if (isset($update['channel_post'])) {
-            $this->update_type = self::CHANNEL_POST;
-
-            return $this->update_type;
+            return self::CHANNEL_POST;
         }
 
         return false;
