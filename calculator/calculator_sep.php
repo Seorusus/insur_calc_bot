@@ -762,7 +762,8 @@ if (!empty($callbackData)) {
             ]),
         ];
 
-
+        $telegram->sendMessage($content);
+        $messageId = $telegram->MessageID();
 
         /*---  Debuging ---*/
         function saveDebugInfo($debugLogFile, $data) {
@@ -774,18 +775,34 @@ if (!empty($callbackData)) {
         $debugLogFile = 'logs/debug_log.txt';
         saveDebugInfo($debugLogFile, $buttons);
         saveDebugInfo($debugLogFile, $content);
-        saveDebugInfo($debugLogFile, json_encode(['currencyName' => $currencyName]));
         saveDebugInfo($debugLogFile, json_encode(['currencyNameJson' => $currencyNameJson]));
-        saveDebugInfo($debugLogFile, json_encode(['ageFormated' => $ageFormated]));
         saveDebugInfo($debugLogFile, json_encode(['ageFormatedJson' => $ageFormatedJson]));
-        saveDebugInfo($debugLogFile, json_encode(['durationNum' => $durationNum]));
+        saveDebugInfo($debugLogFile, json_encode(['summNameJson' => $summNameJson]));
         saveDebugInfo($debugLogFile, json_encode(['durationNumJson' => $durationNumJson]));
 
         /*!---  Debuging ---*/
 
-        $telegram->sendMessage($content);
-        $messageId = $telegram->MessageID();
+//        $telegram->sendMessage($content);
+//        $messageId = $telegram->MessageID();
     }
+}
+
+
+
+if (strpos($callbackData, 'sum_') === 0) {
+    $summ = $callbackData;
+    $chat_id = $telegram->Callback_ChatID();
+    $summName = substr($callbackData, 4);
+
+    $content = [
+        'chat_id' => $chat_id,
+        'text' => 'Сума страховки <b>' . $summName . '</b>',
+        'parse_mode' => "html",
+        'reply_to_message_id' => $messageId,
+    ];
+    $telegram->sendMessage($content);
+    $messageId = $telegram->MessageID();
+    saveUserData($chat_id, 'summName', $summName);
 }
 
 /* ================================================== */
@@ -798,7 +815,7 @@ if (
     isset($durationNumJson) &&
     isset($currencyNameJson) &&
     isset($summNameJson) &&
-    ($callbackData === 'cur_dollar' || $callbackData === 'cur_hrivnya')
+    (substr($summ, 0, 3) === 'sum')
 ) {
     $content = [
         'chat_id' => $chat_id,
