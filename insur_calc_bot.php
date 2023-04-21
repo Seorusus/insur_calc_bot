@@ -63,7 +63,7 @@ function listFiles($path) {
 
 /* Writing to message.txt */
 function writeLogFile($string, $clear = false) {
-    $logFileName = __DIR__."/message.json";
+    $logFileName = "logs/message.json";
     $now = date("Y-m-d H:i:s");
 
     if ($clear === 'false') {
@@ -77,7 +77,7 @@ function writeLogFile($string, $clear = false) {
 $data = file_get_contents('php://input');
 writeLogFile($data, false);
 
-echo file_get_contents(__DIR__."/message.json");
+echo file_get_contents("logs/message.json");
 
 /* ============================================ */
 

@@ -128,7 +128,7 @@ if (!empty($callbackData)) {
     if ($callbackData === 'continue_sep') {
         $content = [
             'chat_id' => $chat_id,
-            'text' => 'Укажiть стать',
+            'text' => 'Вкажiть стать',
             'parse_mode' => "html",
             'reply_markup' => json_encode([
                 'inline_keyboard' => [
@@ -264,9 +264,10 @@ if (!empty($callbackData)) {
                             ['text' => '15', 'callback_data' => 'duration_15'],
                             ['text' => '20', 'callback_data' => 'duration_20'],
                             ['text' => '25', 'callback_data' => 'duration_25'],
+                            ['text' => '30', 'callback_data' => 'duration_30'],
                         ],
                         [
-                            ['text' => '30', 'callback_data' => 'duration_30'],
+                            ['text' => '35', 'callback_data' => 'duration_35'],
                             ['text' => '40', 'callback_data' => 'duration_40'],
                             ['text' => '45', 'callback_data' => 'duration_45'],
                             ['text' => '50', 'callback_data' => 'duration_50'],
@@ -282,9 +283,10 @@ if (!empty($callbackData)) {
                             ['text' => '15', 'callback_data' => 'duration_15'],
                             ['text' => '20', 'callback_data' => 'duration_20'],
                             ['text' => '25', 'callback_data' => 'duration_25'],
+                            ['text' => '30', 'callback_data' => 'duration_30'],
                         ],
                         [
-                            ['text' => '30', 'callback_data' => 'duration_30'],
+                            ['text' => '35', 'callback_data' => 'duration_35'],
                             ['text' => '40', 'callback_data' => 'duration_40'],
                             ['text' => '45', 'callback_data' => 'duration_45'],
                             ['text' => '50', 'callback_data' => 'duration_50'],
@@ -298,11 +300,11 @@ if (!empty($callbackData)) {
                             ['text' => '10', 'callback_data' => 'duration_10'],
                             ['text' => '15', 'callback_data' => 'duration_15'],
                             ['text' => '20', 'callback_data' => 'duration_20'],
-
+                            ['text' => '25', 'callback_data' => 'duration_25'],
                         ],
                         [
-                            ['text' => '25', 'callback_data' => 'duration_25'],
                             ['text' => '30', 'callback_data' => 'duration_30'],
+                            ['text' => '35', 'callback_data' => 'duration_35'],
                             ['text' => '40', 'callback_data' => 'duration_40'],
                             ['text' => '45', 'callback_data' => 'duration_45'],
                         ]
@@ -315,11 +317,11 @@ if (!empty($callbackData)) {
                             ['text' => '10', 'callback_data' => 'duration_10'],
                             ['text' => '15', 'callback_data' => 'duration_15'],
                             ['text' => '20', 'callback_data' => 'duration_20'],
-
+                            ['text' => '25', 'callback_data' => 'duration_25'],
                         ],
                         [
-                            ['text' => '25', 'callback_data' => 'duration_25'],
                             ['text' => '30', 'callback_data' => 'duration_30'],
+                            ['text' => '35', 'callback_data' => 'duration_35'],
                             ['text' => '40', 'callback_data' => 'duration_40'],
                         ]
                     ];
@@ -496,14 +498,10 @@ if (!empty($callbackData)) {
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                            ['text' => '1500', 'callback_data' => 'sum_1500'],
-                            ['text' => '2000', 'callback_data' => 'sum_2000'],
                             ['text' => '3000', 'callback_data' => 'sum_3000'],
                         ],
                         [
-                            ['text' => '4000', 'callback_data' => 'sum_4000'],
                             ['text' => '5000', 'callback_data' => 'sum_5000'],
-                            ['text' => '6000', 'callback_data' => 'sum_6000'],
                             ['text' => '7000', 'callback_data' => 'sum_7000'],
                             ['text' => '8000', 'callback_data' => 'sum_8000'],
                         ],
@@ -514,11 +512,9 @@ if (!empty($callbackData)) {
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                            ['text' => '1500', 'callback_data' => 'sum_1500'],
-                            ['text' => '2000', 'callback_data' => 'sum_2000'],
+                            ['text' => '3000', 'callback_data' => 'sum_3000'],
                         ],
                         [
-                            ['text' => '3000', 'callback_data' => 'sum_3000'],
                             ['text' => '4000', 'callback_data' => 'sum_4000'],
                             ['text' => '5000', 'callback_data' => 'sum_5000'],
                             ['text' => '5500', 'callback_data' => 'sum_5500'],
@@ -529,12 +525,10 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
                             ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
                         ],
                         [
-                            ['text' => '1500', 'callback_data' => 'sum_1500'],
                             ['text' => '2000', 'callback_data' => 'sum_2000'],
                             ['text' => '3000', 'callback_data' => 'sum_3000'],
                             ['text' => '4000', 'callback_data' => 'sum_4000'],
@@ -545,16 +539,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                            ['text' => '1400', 'callback_data' => 'sum_1400'],
-                            ['text' => '1800', 'callback_data' => 'sum_1800'],
-                        ],
-                        [
                             ['text' => '2000', 'callback_data' => 'sum_2000'],
-                            ['text' => '2200', 'callback_data' => 'sum_2200'],
-                            ['text' => '2400', 'callback_data' => 'sum_2400'],
-                            ['text' => '2600', 'callback_data' => 'sum_2400'],
                             ['text' => '3000', 'callback_data' => 'sum_3000'],
                         ],
                     ];
@@ -563,18 +549,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
-                            ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                            ['text' => '1200', 'callback_data' => 'sum_1200'],
-                            ['text' => '1400', 'callback_data' => 'sum_1400'],
-                        ],
-                        [
-                            ['text' => '1600', 'callback_data' => 'sum_1600'],
-                            ['text' => '1800', 'callback_data' => 'sum_1800'],
                             ['text' => '2000', 'callback_data' => 'sum_2000'],
-                            ['text' => '2200', 'callback_data' => 'sum_2200'],
-                            ['text' => '2400', 'callback_data' => 'sum_2400'],
                             ['text' => '2600', 'callback_data' => 'sum_2600'],
                         ],
                     ];
@@ -584,16 +560,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
-                            ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                            ['text' => '1200', 'callback_data' => 'sum_1200'],
-                        ],
-                        [
-                            ['text' => '1400', 'callback_data' => 'sum_1400'],
                             ['text' => '1600', 'callback_data' => 'sum_1600'],
-                            ['text' => '1800', 'callback_data' => 'sum_1800'],
-                            ['text' => '2000', 'callback_data' => 'sum_2000'],
                             ['text' => '2200', 'callback_data' => 'sum_2200'],
                         ],
                     ];
@@ -603,15 +571,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
-                            ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                            ['text' => '1200', 'callback_data' => 'sum_1200'],
-                        ],
-                        [
                             ['text' => '1400', 'callback_data' => 'sum_1400'],
-                            ['text' => '1600', 'callback_data' => 'sum_1600'],
-                            ['text' => '1800', 'callback_data' => 'sum_1800'],
                             ['text' => '2000', 'callback_data' => 'sum_2000'],
                         ],
                     ];
@@ -621,14 +582,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
-                            ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                        ],
-                        [
-                            ['text' => '1200', 'callback_data' => 'sum_1200'],
                             ['text' => '1400', 'callback_data' => 'sum_1400'],
-                            ['text' => '1600', 'callback_data' => 'sum_1600'],
                             ['text' => '1800', 'callback_data' => 'sum_1800'],
                         ],
                     ];
@@ -638,13 +593,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
-                            ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                        ],
-                        [
                             ['text' => '1200', 'callback_data' => 'sum_1200'],
-                            ['text' => '1400', 'callback_data' => 'sum_1400'],
                             ['text' => '1600', 'callback_data' => 'sum_1600'],
                         ],
                     ];
@@ -654,13 +604,8 @@ if (!empty($callbackData)) {
                     $buttons = [
                         [
                             ['text' => '300', 'callback_data' => 'sum_300'],
-                            ['text' => '600', 'callback_data' => 'sum_600'],
-                            ['text' => '800', 'callback_data' => 'sum_800'],
                             ['text' => '1000', 'callback_data' => 'sum_1000'],
-                        ],
-                        [
                             ['text' => '1200', 'callback_data' => 'sum_1200'],
-                            ['text' => '1400', 'callback_data' => 'sum_1400'],
                             ['text' => '1500', 'callback_data' => 'sum_1500'],
                         ],
                     ];
@@ -752,7 +697,7 @@ if (!empty($callbackData)) {
         $content = [
             'chat_id' => $chat_id,
             'text' => '👇 Оберiть суму щорічного внеску. 👇
-            Мінімальна щорічний внесок: 3000 грн, або $300',
+            Мінімальний щорічний внесок: 3000 грн, або $300',
             'parse_mode' => "html",
             'reply_markup' => json_encode([
                 'inline_keyboard' => $buttons,
@@ -763,13 +708,13 @@ if (!empty($callbackData)) {
         ];
 
         $telegram->sendMessage($content);
-        $messageId = $telegram->MessageID();
+//        $messageId = $telegram->MessageID();
 
         /*---  Debuging ---*/
         function saveDebugInfo($debugLogFile, $data) {
-            $formattedData = print_r($data, true); // Преобразует данные в читаемый формат
-            $timestamp = date('Y-m-d H:i:s'); // Добавляет метку времени
-            file_put_contents($debugLogFile, $timestamp . ' - ' . $formattedData . PHP_EOL, FILE_APPEND); // Записывает данные в файл
+            $formattedData = print_r($data, true);
+            $timestamp = date('Y-m-d H:i:s');
+            file_put_contents($debugLogFile, $timestamp . ' - ' . $formattedData . PHP_EOL, FILE_APPEND);
         }
 
         $debugLogFile = 'logs/debug_log.txt';
@@ -782,32 +727,27 @@ if (!empty($callbackData)) {
 
         /*!---  Debuging ---*/
 
-//        $telegram->sendMessage($content);
-//        $messageId = $telegram->MessageID();
     }
 }
 
-
-
 if (strpos($callbackData, 'sum_') === 0) {
     $summ = $callbackData;
-    $chat_id = $telegram->Callback_ChatID();
+//    $chat_id = $telegram->Callback_ChatID();
     $summName = substr($callbackData, 4);
 
     $content = [
         'chat_id' => $chat_id,
-        'text' => 'Сума страховки <b>' . $summName . '</b>',
+        'text' => 'Сума щорічного внеску<b> ' . $summName . '</b>',
         'parse_mode' => "html",
-        'reply_to_message_id' => $messageId,
+//        'reply_to_message_id' => $messageId,
     ];
-    $telegram->sendMessage($content);
-    $messageId = $telegram->MessageID();
     saveUserData($chat_id, 'summName', $summName);
+    $telegram->sendMessage($content);
+//    $messageId = $telegram->MessageID();
 }
-
 /* ================================================== */
 
-$fromCallbackQuery = false;
+//$fromCallbackQuery = false;
 
 if (
     isset($stateNameJson) &&
@@ -822,9 +762,9 @@ if (
         'text' => 'Ви ввели даннi:
 Ваша стать - <b>' . $stateNameJson . '</b>.
 Ваш вiк, повних рокiв - <b>' . $ageFormatedJson . '</b>.
-Ваш термін страхування, рокiв <b>' . $durationNumJson . '</b>.
-Валюта страховки <b>' . $currencyNameJson . '</b>.
-Сума страховки <b>' . $summNameJson . '</b>.',
+Ваш термін страхування, рокiв<b> ' . $durationNumJson . '</b>.
+Валюта страховки <b> ' . $currencyNameJson . '</b>.
+Сума щорічного внеску<b> ' . $summNameJson . '</b>.',
         'parse_mode' => "html",
     ];
     $telegram->sendMessage($content);
@@ -843,7 +783,7 @@ if (
                 [
                     [
                         'text' => 'Повернутись на початок розрахунку',
-                        'callback_data' => 'back_calculation'
+                        'callback_data' => 'continue_sep'
                     ],
                 ],
                 [
@@ -876,12 +816,12 @@ if (isset($update["callback_query"])) {
         // Insurance calc.
         $content = [
             'chat_id' => $callbackChatId,
-            'text' => 'Делаю расчет',
+            'text' => 'Роблю разрахунок...',
         ];
         $telegram->sendMessage($content);
 
         // Load a local file to upload. If is already on Telegram's Servers just pass the resource id
-        $gif = curl_file_create('images/waiting-1.gif', 'image/gif');
+        $gif = curl_file_create('images/waiting-1-min.gif', 'image/gif');
         $content = array('chat_id' => $callbackChatId, 'animation' => $gif);
 
         $response = $telegram->sendAnimation($content);
@@ -889,7 +829,7 @@ if (isset($update["callback_query"])) {
         $messageIdToDelete = $response['result']['message_id'];
 
         // delay callback.
-        usleep(8 * 1000000);
+        usleep(7700000);
 
         $telegram->deleteMessage([
             'chat_id' => $chat_id,
@@ -904,14 +844,45 @@ if (isset($update["callback_query"])) {
         $telegram->sendMessage($content);
         $messageId = $telegram->MessageID();
 
-    } elseif (($callbackData === 'back_calculation') || ($callbackData === 'back_menu')) {
+        /* -- Insert calculation -- */
+
+        $result = ($durationNumJson * $summNameJson);
+        $content = [
+            'chat_id' => $chat_id,
+            'text' => '<b>Страхова сума становить ' . $result . '</b>
+
+Ваша стать - <b>' . $stateNameJson . '</b>.
+Ваш вiк, повних рокiв - <b>' . $ageFormatedJson . '</b>.
+Ваш термін страхування, рокiв <b>' . $durationNumJson . '</b>.
+Валюта страховки <b>' . $currencyNameJson . '</b>.
+Сума щорічного внеску <b>' . $summNameJson . '</b>.
+
+<b>Програма СЕП пропонує Вам широкий страховий захист і вигідні інвестиції оптимальним шляхом!</b>
+
+<i>Страхова економічна програма (СЕП) складається з 5 тарифів:</i>
+GX5S – Страхування на випадок смерті та дожиття із виплатою диференційованої страхової суми на момент смерті та участю у додатковому прибутку.
+
+UTZ – Додаткове страхування на випадок смерті в результаті нещасного випадку. Страхова сума виплачується в разі, якщо смерть застрахованої особи настала в результаті нещасного випадку протягом узгодженого терміну дії договору.
+
+UI50P – Додаткове страхування на випадок тривалої інвалідності в результаті нещасного випадку у розмірі від 50%. В разі, якщо ступінь інвалідності становить 50% і більше, то страховик бере на себе обов’язок сплачувати страхові премії за страхувальника і обумовлена страхова виплата разом із додатковим прибутком здійснюється по закінченню терміну дії договору.
+
+UI100 – Додаткове страхування на випадок повної тривалої інвалідності в результаті нещасного випадку. Страхова сума виплачується у повному обсязі, якщо ступінь тривалої інвалідності складає 100%.
+
+RXZ – Додаткове страхування на випадок смерті за будь-якої причини. Страхова сума виплачується у разі смерті застрахованої особи протягом узгодженого терміну дії договору. Страхова сума за тарифом складає 2000 USD або 3000 USD (10000 UAH або 15000 UAH) в залежності від розміру страхової премії – більше, або менше 500 USD (2500 UAH).
+',
+            'parse_mode' => "html",
+        ];
+        $telegram->sendMessage($content);
+        $messageId = $telegram->MessageID();
+        saveUserData($chat_id, 'result', $result);
+
+    } elseif (($callbackData === 'continue_sep') || ($callbackData === 'back_menu')) {
 
         // Delete JSON file.
         $files = glob('data/' . $userId . '*.json');
         foreach ($files as $file) {
             unlink($file);
         }
-        // В зависимости от $callbackData перенаправьте пользователя на соответствующий шаг
     }
 
     // CallbackQuery response.
