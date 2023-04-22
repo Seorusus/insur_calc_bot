@@ -708,7 +708,6 @@ if (!empty($callbackData)) {
         ];
 
         $telegram->sendMessage($content);
-//        $messageId = $telegram->MessageID();
 
         /*---  Debuging ---*/
         function saveDebugInfo($debugLogFile, $data) {
@@ -717,13 +716,12 @@ if (!empty($callbackData)) {
             file_put_contents($debugLogFile, $timestamp . ' - ' . $formattedData . PHP_EOL, FILE_APPEND);
         }
 
-        $debugLogFile = 'logs/debug_log.txt';
-        saveDebugInfo($debugLogFile, $buttons);
-        saveDebugInfo($debugLogFile, $content);
-        saveDebugInfo($debugLogFile, json_encode(['currencyNameJson' => $currencyNameJson]));
-        saveDebugInfo($debugLogFile, json_encode(['ageFormatedJson' => $ageFormatedJson]));
-        saveDebugInfo($debugLogFile, json_encode(['summNameJson' => $summNameJson]));
-        saveDebugInfo($debugLogFile, json_encode(['durationNumJson' => $durationNumJson]));
+//        $debugLogFile = 'logs/debug_log.txt';
+//        saveDebugInfo($debugLogFile, json_encode(['stateNameJson' => $stateNameJson]));
+//        saveDebugInfo($debugLogFile, json_encode(['currencyNameJson' => $currencyNameJson]));
+//        saveDebugInfo($debugLogFile, json_encode(['ageFormatedJson' => $ageFormatedJson]));
+//        saveDebugInfo($debugLogFile, json_encode(['durationNumJson' => $durationNumJson]));
+//        saveDebugInfo($debugLogFile, json_encode(['summNameJson' => $summNameJson]));
 
         /*!---  Debuging ---*/
 
@@ -732,31 +730,21 @@ if (!empty($callbackData)) {
 
 if (strpos($callbackData, 'sum_') === 0) {
     $summ = $callbackData;
-//    $chat_id = $telegram->Callback_ChatID();
+    $chat_id = $telegram->Callback_ChatID();
     $summName = substr($callbackData, 4);
 
     $content = [
         'chat_id' => $chat_id,
         'text' => 'Сума щорічного внеску<b> ' . $summName . '</b>',
         'parse_mode' => "html",
-//        'reply_to_message_id' => $messageId,
+        'reply_to_message_id' => $messageId,
     ];
     saveUserData($chat_id, 'summName', $summName);
     $telegram->sendMessage($content);
-//    $messageId = $telegram->MessageID();
-}
-/* ================================================== */
+    $messageId = $telegram->MessageID();
 
-//$fromCallbackQuery = false;
+$fromCallbackQuery = false;
 
-if (
-    isset($stateNameJson) &&
-    isset($ageFormatedJson) &&
-    isset($durationNumJson) &&
-    isset($currencyNameJson) &&
-    isset($summNameJson) &&
-    (substr($summ, 0, 3) === 'sum')
-) {
     $content = [
         'chat_id' => $chat_id,
         'text' => 'Ви ввели даннi:
@@ -803,6 +791,7 @@ if (
     $telegram->sendMessage($content);
     $messageId = $telegram->MessageID();
 }
+/* ================================================== */
 
 // CallbackQuery.
 $update = json_decode(file_get_contents("php://input"), true);
@@ -829,7 +818,7 @@ if (isset($update["callback_query"])) {
         $messageIdToDelete = $response['result']['message_id'];
 
         // delay callback.
-        usleep(7700000);
+        usleep(6000000);
 
         $telegram->deleteMessage([
             'chat_id' => $chat_id,
