@@ -35,6 +35,7 @@ $ageFormatedJson = $dataArray[$userId]['ageFormated'];
 $durationNumJson = $dataArray[$userId]['durationNum'];
 $currencyNameJson = $dataArray[$userId]['currencyName'];
 $summNameJson = $dataArray[$userId]['summName'];
+$summInshNameJson = $dataArray[$userId]['summInshName'];
 
 function saveUserData($chat_id, $key, $value) {
     global $userId;
@@ -715,16 +716,6 @@ if (!empty($callbackData)) {
             $timestamp = date('Y-m-d H:i:s');
             file_put_contents($debugLogFile, $timestamp . ' - ' . $formattedData . PHP_EOL, FILE_APPEND);
         }
-
-//        $debugLogFile = 'logs/debug_log.txt';
-//        saveDebugInfo($debugLogFile, json_encode(['stateNameJson' => $stateNameJson]));
-//        saveDebugInfo($debugLogFile, json_encode(['currencyNameJson' => $currencyNameJson]));
-//        saveDebugInfo($debugLogFile, json_encode(['ageFormatedJson' => $ageFormatedJson]));
-//        saveDebugInfo($debugLogFile, json_encode(['durationNumJson' => $durationNumJson]));
-//        saveDebugInfo($debugLogFile, json_encode(['summNameJson' => $summNameJson]));
-
-        /*!---  Debuging ---*/
-
     }
 }
 
@@ -803,11 +794,6 @@ if (isset($update["callback_query"])) {
 
     if ($callbackData === 'calculation') {
         // Insurance calc.
-        $content = [
-            'chat_id' => $callbackChatId,
-            'text' => 'Роблю разрахунок...',
-        ];
-        $telegram->sendMessage($content);
 
         // Load a local file to upload. If is already on Telegram's Servers just pass the resource id
         $gif = curl_file_create('images/waiting-1-min.gif', 'image/gif');
@@ -834,19 +820,282 @@ if (isset($update["callback_query"])) {
         $messageId = $telegram->MessageID();
 
         /* -- Insert calculation -- */
-
         $result = ($durationNumJson * $summNameJson);
-        $content = [
+
+        // Add condition for $result.
+        if ($stateNameJson === 'Жiноча') {
+            $result *= 1.0;
+        } elseif ($stateNameJson === 'Чоловiча') {
+            $result *= 0.9;
+        }
+
+        if ($currencyNameJson === 'Доллар США') {
+            switch ($ageFormatedJson) {
+                case 15:
+                    $coef = 1;
+                    break;
+                case 20:
+                    $coef = 0.9974;
+                    break;
+                case 25:
+                    $coef = 0.9944;
+                    break;
+                case 30:
+                    $coef = 0.9895;
+                    break;
+                case 35:
+                    $coef = 0.9799;
+                    break;
+                case 40:
+                    $coef = 0.9713;
+                    break;
+                case 45:
+                    $coef = 0.9618;
+                    break;
+                case 50:
+                    $coef = 0.9531;
+                    break;
+                case 55:
+                    $coef = 0.9452;
+                    break;
+                case 60:
+                    $coef = 0.9363;
+                    break;
+                default:
+                    $coef = 1;
+                    break;
+            }
+
+            $result *= $coef;
+            $resultInshSumm = $result;
+
+            switch ($durationNumJson) {
+                case 10:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 1.0530;
+                            break;
+                        case 1000:
+                            $result /= 1.0080;
+                            break;
+                        case 1500:
+                            $result /= 1.0013;
+                            break;
+                        case 5000:
+                            $result /= 0.9827;
+                            break;
+                        case 7000:
+                            $result /= 0.9723;
+                            break;
+                        case 8000:
+                            $result /= 0.9720;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.9235;
+                    break;
+
+                case 15:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 1.0160;
+                            break;
+                        case 1000:
+                            $result /= 0.9610;
+                            break;
+                        case 3000:
+                            $result /= 0.9335;
+                            break;
+                        case 4000:
+                            $result /= 0.9184;
+                            break;
+                        case 5000:
+                            $result /= 0.9170;
+                            break;
+                        case 5500:
+                            $result /= 0.9174;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.8889;
+                    break;
+
+                case 20:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.9483;
+                            break;
+                        case 800:
+                            $result /= 0.9252;
+                            break;
+                        case 1000:
+                            $result /= 0.9194;
+                            break;
+                        case 2000:
+                            $result /= 0.8908;
+                            break;
+                        case 3000:
+                            $result /= 0.8699;
+                            break;
+                        case 4000:
+                            $result /= 0.8682;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.8544;
+                    break;
+
+                case 25:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.9129;
+                            break;
+                        case 1000:
+                            $result /= 0.8601;
+                            break;
+                        case 2000:
+                            $result /= 0.8481;
+                            break;
+                        case 3000:
+                            $result /= 0.8235;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.8200;
+                    break;
+
+                case 30:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.8850;
+                            break;
+                        case 1000:
+                            $result /= 0.8254;
+                            break;
+                        case 2000:
+                            $result /= 0.7883;
+                            break;
+                        case 2600:
+                            $result /= 0.7854;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.7860;
+                    break;
+
+                case 35:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.8578;
+                            break;
+                        case 1000:
+                            $result /= 0.7917;
+                            break;
+                        case 1600:
+                            $result /= 0.7539;
+                            break;
+                        case 2200:
+                            $result /= 0.7492;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.7521;
+                    break;
+
+                case 40:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.8392;
+                            break;
+                        case 1000:
+                            $result /= 0.7663;
+                            break;
+                        case 1400:
+                            $result /= 0.7277;
+                            break;
+                        case 2000:
+                            $result /= 0.7213;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.7183;
+                    break;
+
+                case 45:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.8202;
+                            break;
+                        case 1000:
+                            $result /= 0.7411;
+                            break;
+                        case 1400:
+                            $result /= 0.6995;
+                            break;
+                        case 1800:
+                            $result /= 0.6944;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.6840;
+                    break;
+
+                case 50:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.8013;
+                            break;
+                        case 1000:
+                            $result /= 0.7168;
+                            break;
+                        case 1200:
+                            $result /= 0.6769;
+                            break;
+                        case 1600:
+                            $result /= 0.6698;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.6493;
+                    break;
+
+                case 55:
+                    switch ($summNameJson) {
+                        case 300:
+                            $result /= 0.7886;
+                            break;
+                        case 1000:
+                            $result /= 0.6629;
+                            break;
+                        case 1200:
+                            $result /= 0.6568;
+                            break;
+                        case 1500:
+                            $result /= 0.6507;
+                            break;
+                        default:
+                            break;
+                    }
+                    $resultInshSumm = $result * 0.6134;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+                $content = [
             'chat_id' => $chat_id,
-            'text' => '<b>Страхова сума становить ' . $result . '</b>
-
-Ваша стать - <b>' . $stateNameJson . '</b>.
-Ваш вiк, повних рокiв - <b>' . $ageFormatedJson . '</b>.
-Ваш термін страхування, рокiв <b>' . $durationNumJson . '</b>.
-Валюта страховки <b>' . $currencyNameJson . '</b>.
-Сума щорічного внеску <b>' . $summNameJson . '</b>.
-
-<b>Програма СЕП пропонує Вам широкий страховий захист і вигідні інвестиції оптимальним шляхом!</b>
+            'text' => '<b>Програма СЕП пропонує Вам широкий страховий захист і вигідні інвестиції оптимальним шляхом!</b>
 
 <i>Страхова економічна програма (СЕП) складається з 5 тарифів:</i>
 GX5S – Страхування на випадок смерті та дожиття із виплатою диференційованої страхової суми на момент смерті та участю у додатковому прибутку.
@@ -858,6 +1107,20 @@ UI50P – Додаткове страхування на випадок трив
 UI100 – Додаткове страхування на випадок повної тривалої інвалідності в результаті нещасного випадку. Страхова сума виплачується у повному обсязі, якщо ступінь тривалої інвалідності складає 100%.
 
 RXZ – Додаткове страхування на випадок смерті за будь-якої причини. Страхова сума виплачується у разі смерті застрахованої особи протягом узгодженого терміну дії договору. Страхова сума за тарифом складає 2000 USD або 3000 USD (10000 UAH або 15000 UAH) в залежності від розміру страхової премії – більше, або менше 500 USD (2500 UAH).
+
+<b>Капітал* становить:
+ ' . $currencyNameJson . ' <u>' .  number_format($result, 2, '.', '') . '</u></b>
+*Капітал - сума, яку Ви отримаєте по закiнченню терміна страхування.
+
+<b>Страхова сума* становить:
+ ' . $currencyNameJson . ' <u>' .  number_format($resultInshSumm, 2, '.', '') . '</u></b>
+*Страхова сума - сума, яку отримає Вигодонабувач на разi страхового випадку.
+
+Ваша стать - <b>' . $stateNameJson . '</b>.
+Ваш вiк, повних рокiв - <b>' . $ageFormatedJson . '</b>.
+Ваш термін страхування, рокiв <b>' . $durationNumJson . '</b>.
+Валюта страховки <b>' . $currencyNameJson . '</b>.
+Сума щорічного внеску <b>' . $summNameJson . '</b>.
 ',
             'parse_mode' => "html",
         ];

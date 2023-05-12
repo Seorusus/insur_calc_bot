@@ -120,17 +120,24 @@ if ($telegram->messageFromGroup()) {
 
 if ($arrDataAnswer['message']) {
     if ($text === INS_CALCULATOR) {
+        $gif = curl_file_create('images/bot_ins_optimize.gif', 'image/gif');
+        $content = [
+            'chat_id' => CHAT_ID,
+            'animation' => $gif,
+        ];
+        $telegram->sendAnimation($content);
+
         $content = [
             'chat_id' => CHAT_ID,
             'text' =>
                 "Бот <b>" . INS_CALCULATOR . "</b> познайомить Вас із програмами австрійської страхової компанії Grawe та допоможе Вам зробити 
-<b><i>розрахунок страховки.</i></b>",
+<b><i>приблизний розрахунок страховки.</i></b>",
             'parse_mode' => "html",
             'reply_markup' => json_encode([
                 'inline_keyboard' => [
                     [
                         [
-                            'text' => INS_CALCULATOR,
+                            'text' => 'Перейти у ' . INS_CALCULATOR,
                             'url' => 'https://t.me/insurance_calc_bot',
                         ],
                     ]
