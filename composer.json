@@ -14,7 +14,9 @@
         "php": ">=5.0",
         "ext-json": "*",
         "ext-curl": "*",
-			"ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "tecnickcom/tcpdf": "^6.3",
+        "mpdf/mpdf": "^8.1"
 		},
     "autoload": {
         "files": ["Telegram.php", "TelegramErrorLogger.php"]
