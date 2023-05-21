@@ -228,22 +228,23 @@ if (!$telegram->messageFromGroup()) {
             case CALCULATION:
                 if (!$telegram->messageFromGroup()) {
 //                    $reply = "<b>Оберiть, будьласка, для якої проргами робимо розрахунок</b>\n⬇️⬇️⬇️";
-                    $reply = "<b>Виберiть програму для розрахунку</b>";
+                    $reply = "<b>Виберiть програму для розрахунку</b>
+* Калькулятори iнших програм у разробцi";
                     // Create option for the custom keyboard. Array of array string
                     $option = [
                         [CALCULATION_PROG . " " . SEP],
-                        [CALCULATION_PROG . " " . CLASSIC],
-                        [CALCULATION_PROG . " " . GOLD],
-                        [CALCULATION_PROG . " " . INVEST_PLAN],
-                        [CALCULATION_PROG . " " . UNIOR_EXTRA],
-                        [CALCULATION_PROG . " " . MAGISTR],
-                        [CALCULATION_PROG . " " . UNIVERSAL],
-                        [CALCULATION_PROG . " " . SUPPORT_HEALTH_1],
-                        [CALCULATION_PROG . " " . GRAVE_MEDIC_ACCUMULATION],
-                        [CALCULATION_PROG . " " . ACCUMULATION],
-                        [CALCULATION_PROG . " " . SUPPORT_3_HARD],
-                        [CALCULATION_PROG . " " . GRAVE_MEDIC_RISK_INS],
-                        [CALCULATION_PROG . " " . ACCUMULATION],
+//                        [CALCULATION_PROG . " " . CLASSIC],
+//                        [CALCULATION_PROG . " " . GOLD],
+//                        [CALCULATION_PROG . " " . INVEST_PLAN],
+//                        [CALCULATION_PROG . " " . UNIOR_EXTRA],
+//                        [CALCULATION_PROG . " " . MAGISTR],
+//                        [CALCULATION_PROG . " " . UNIVERSAL],
+//                        [CALCULATION_PROG . " " . SUPPORT_HEALTH_1],
+//                        [CALCULATION_PROG . " " . GRAVE_MEDIC_ACCUMULATION],
+//                        [CALCULATION_PROG . " " . ACCUMULATION],
+//                        [CALCULATION_PROG . " " . SUPPORT_3_HARD],
+//                        [CALCULATION_PROG . " " . GRAVE_MEDIC_RISK_INS],
+//                        [CALCULATION_PROG . " " . ACCUMULATION],
                         [CONSULTATION],
                     ];
                     // Get the keyboard

@@ -74,6 +74,13 @@ if ((!$telegram->messageFromGroup())
     && !is_null($text)
     && !is_null($chat_id)
     && ($text === CALCULATION_PROG . " " . SEP)) {
+
+    }
+
+if ((!$telegram->messageFromGroup())
+    && !is_null($text)
+    && !is_null($chat_id)
+    && ($text === CALCULATION_PROG . " " . SEP)) {
     $reply = "Не погано)
 
 <b>" .SEP . "</b> це вигідні інвестиції оптимальним шляхом!
@@ -447,12 +454,13 @@ if (!empty($callbackData)) {
 
         $content = [
             'chat_id' => $chat_id,
-            'text' => '👇 Оберiть валюту страховки 👇',
+            'text' => '👇 Оберiть валюту страховки 👇
+Варiант "Гривня" в розробцi',
             'parse_mode' => "html",
             'reply_markup' => json_encode([
                 'inline_keyboard' => [
                     [
-                        ['text' => 'Гривня', 'callback_data' => 'cur_hrivnya'],
+//                        ['text' => 'Гривня', 'callback_data' => 'cur_hrivnya'],
                         ['text' => 'Доллар США', 'callback_data' => 'cur_dollar'],
                     ],
                 ],
@@ -461,6 +469,7 @@ if (!empty($callbackData)) {
                 'resize_keyboard' => true,
             ]),
         ];
+
         $telegram->sendMessage($content);
         $messageId = $telegram->MessageID();
     }
@@ -726,7 +735,7 @@ if (strpos($callbackData, 'sum_') === 0) {
 
     $content = [
         'chat_id' => $chat_id,
-        'text' => 'Сума щорічного внеску<b> ' . $summName . '</b>',
+        'text' => 'Сума щорічного внеску $<b> ' . $summName . '</b>',
         'parse_mode' => "html",
         'reply_to_message_id' => $messageId,
     ];
@@ -738,12 +747,13 @@ $fromCallbackQuery = false;
 
     $content = [
         'chat_id' => $chat_id,
-        'text' => 'Ви ввели даннi:
+        'text' => '<i>Ви ввели даннi:</i>
+
 Ваша стать - <b>' . $stateNameJson . '</b>.
 Ваш вiк, повних рокiв - <b>' . $ageFormatedJson . '</b>.
 Ваш термін страхування, рокiв<b> ' . $durationNumJson . '</b>.
 Валюта страховки <b> ' . $currencyNameJson . '</b>.
-Сума щорічного внеску<b> ' . $summNameJson . '</b>.',
+Сума щорічного внеску $<b> ' . $summName . '</b>.',
         'parse_mode' => "html",
     ];
     $telegram->sendMessage($content);
@@ -1111,7 +1121,7 @@ if (isset($update["callback_query"])) {
 Ваш вiк, повних рокiв - <b>' . $ageFormatedJson . '</b>.
 Ваш термін страхування, рокiв <b>' . $durationNumJson . '</b>.
 Валюта страховки <b>' . $currencyNameJson . '</b>.
-Сума щорічного внеску <b>' . $summNameJson . '</b>.
+Сума щорічного внеску $<b>' . $summNameJson . '</b>.
 
 ✔️-------------------✔️
 <i>Результати розрахунків є приблизними.
