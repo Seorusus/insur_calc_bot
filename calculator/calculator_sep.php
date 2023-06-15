@@ -807,7 +807,10 @@ if (isset($update["callback_query"])) {
 
         // Load a local file to upload. If is already on Telegram's Servers just pass the resource id
         $gif = curl_file_create('images/waiting-1-min.gif', 'image/gif');
-        $content = array('chat_id' => $callbackChatId, 'animation' => $gif);
+        $content = [
+            'chat_id' => $callbackChatId,
+            'animation' => $gif
+        ];
 
         $response = $telegram->sendAnimation($content);
         $messageIdToDelete = $response['result']['message_id'];

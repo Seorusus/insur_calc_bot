@@ -86,37 +86,6 @@ $textMessage = mb_strtolower($arrDataAnswer["message"]["text"]);
 $chatId = $arrDataAnswer["message"]["chat"]["id"];
 
 /* ============================================ */
-//$test = $data['channel_post']['chat']['type'];
-
-// Send Invite.
-if ($telegram->messageFromGroup()) {
-    if (is_null($chat_id)) {
-        $textMessage = 'Оберіть опцію:';
-        if (!$arrDataAnswer['message']) {
-            $content = [
-                'chat_id' => CHAT_ID,
-                'text' => $textMessage,
-                'parse_mode' => "html",
-                'reply_markup' => json_encode([
-                    'keyboard' => [
-                        [
-                            [
-                                'text' => INS_CALCULATOR,
-                            ],
-                            [
-                                'text' => CONSULTATION,
-                            ],
-                        ],
-                    ],
-                    'is_persistent' => true,
-                    'one_time_keyboard' => false,
-                    'resize_keyboard' => true,
-                ]),
-            ];
-            $telegram->sendMessage($content);
-        }
-    }
-}
 
 if ($arrDataAnswer['message']) {
     if ($text === INS_CALCULATOR) {

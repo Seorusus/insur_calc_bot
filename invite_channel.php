@@ -7,6 +7,17 @@ $telegram = new Telegram(TG_TOKEN);
 // Get the update data
 $result = $telegram->getData();
 
+$update = json_decode(file_get_contents('php://input'), true);
+$channel = CHANNEL_ID;
+$message = $result['message'];
+$forward_from_chat = $message['forward_from_chat'];
+$channel = $forward_from_chat['id'];
+if (isset($update['message']) && $update['message']['chat']['id'] == $channel) {
+    $text = 'Привет, мир!';
+    $content = ['chat_id' => $channel, 'text' => $text];
+    $telegram->sendMessage($content);
+}
+
 // Check if the update has a message
 if (isset($result['message'])) {
     $message = $result['message'];
@@ -21,6 +32,13 @@ if (isset($result['message'])) {
 Або отримати консультацію експерта ⬇️⬇️⬇️';
         // Check if the message text is NOT the text we send
         if ($message['text'] !== $textMessage) {
+            $gif = curl_file_create('images/waiting-1-min.gif', 'image/gif');
+            $content = [
+                'chat_id' => $channel_id,
+                'animation' => $gif
+            ];
+
+            $response = $telegram->sendAnimation($content);
             // Set the inline keyboard
             $inline_keyboard = [
                 [
@@ -44,6 +62,8 @@ if (isset($result['message'])) {
                 'text' => $textMessage,
                 'reply_markup' => json_encode(['inline_keyboard' => $inline_keyboard])
             ]);
+
+            die();
         }
     }
 }
