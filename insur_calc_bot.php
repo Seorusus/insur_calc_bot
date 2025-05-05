@@ -63,7 +63,14 @@ function listFiles($path) {
 
 /* Writing to message.txt */
 function writeLogFile($string, $clear = false) {
+    $logDir = "logs/";
     $logFileName = "logs/message.json";
+    
+    // Make sure logs directory exists
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0755, true);
+    }
+    
     $now = date("Y-m-d H:i:s");
 
     if ($clear === 'false') {
@@ -77,17 +84,20 @@ function writeLogFile($string, $clear = false) {
 $data = file_get_contents('php://input');
 writeLogFile($data, false);
 
-echo file_get_contents("logs/message.json");
+// Check if file exists before trying to read it
+if (file_exists("logs/message.json")) {
+    echo file_get_contents("logs/message.json");
+}
 
 /* ============================================ */
 
 $arrDataAnswer = json_decode($data, true);
-$textMessage = mb_strtolower($arrDataAnswer["message"]["text"]);
-$chatId = $arrDataAnswer["message"]["chat"]["id"];
+$textMessage = isset($arrDataAnswer["message"]["text"]) ? mb_strtolower($arrDataAnswer["message"]["text"]) : '';
+$chatId = isset($arrDataAnswer["message"]["chat"]["id"]) ? $arrDataAnswer["message"]["chat"]["id"] : '';
 
 /* ============================================ */
 
-if ($arrDataAnswer['message']) {
+if (isset($arrDataAnswer['message'])) {
     if ($text === INS_CALCULATOR) {
         $gif = curl_file_create('images/bot_ins_optimize.gif', 'image/gif');
         $content = [
@@ -187,7 +197,7 @@ if (!$telegram->messageFromGroup()) {
                     'reply_markup' => $keyb,
                     'parse_mode' => "html",
                     'text' => "Привiт, $name!
-Приємно познайомитись. Сьогоднi " . date('d-m-Y', $telegram->Date()) . "
+Приємно побачитись. Сьогоднi " . date('d-m-Y', $telegram->Date()) . "
                 
 ⬇️⬇️⬇️ Виберайте з чого почнемо ⬇️⬇️⬇️",
                 ];

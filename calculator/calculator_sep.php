@@ -22,50 +22,82 @@ $stateName = null;
 $ageFormated = null;
 $currencyName = null;
 $summName = null;
-$timestamp = time('Y-m-d');
-$filename = "data/{$userId}_" . gmdate("G-j-n-Y", time()) . ".json";
+$timestamp = time();
+$filename = "data/{$userId}_" . gmdate("G-j-n-Y", $timestamp) . ".json";
 
 $userId = $telegram->UserID();
-$jsonData = file_get_contents($filename);
+$dataArray = [];
+$stateNameJson = '';
+$ageFormatedJson = '';
+$durationNumJson = '';
+$currencyNameJson = '';
+$summNameJson = '';
+$summInshNameJson = '';
 
-$dataArray = json_decode($jsonData, true);
-
-$stateNameJson = $dataArray[$userId]['stateName'];
-$ageFormatedJson = $dataArray[$userId]['ageFormated'];
-$durationNumJson = $dataArray[$userId]['durationNum'];
-$currencyNameJson = $dataArray[$userId]['currencyName'];
-$summNameJson = $dataArray[$userId]['summName'];
-$summInshNameJson = $dataArray[$userId]['summInshName'];
+// Check if file exists before trying to read it
+if (file_exists($filename)) {
+    $jsonData = file_get_contents($filename);
+    if ($jsonData !== false) {
+        $dataArray = json_decode($jsonData, true);
+        if (is_array($dataArray) && isset($dataArray[$userId])) {
+            $stateNameJson = isset($dataArray[$userId]['stateName']) ? $dataArray[$userId]['stateName'] : '';
+            $ageFormatedJson = isset($dataArray[$userId]['ageFormated']) ? $dataArray[$userId]['ageFormated'] : '';
+            $durationNumJson = isset($dataArray[$userId]['durationNum']) ? $dataArray[$userId]['durationNum'] : '';
+            $currencyNameJson = isset($dataArray[$userId]['currencyName']) ? $dataArray[$userId]['currencyName'] : '';
+            $summNameJson = isset($dataArray[$userId]['summName']) ? $dataArray[$userId]['summName'] : '';
+            $summInshNameJson = isset($dataArray[$userId]['summInshName']) ? $dataArray[$userId]['summInshName'] : '';
+        }
+    }
+}
 
 function saveUserData($chat_id, $key, $value) {
     global $userId;
 
     $dir = 'data/';
-    $files = scandir($dir);
-
-    foreach ($files as $filename) {
-        if (strpos($filename, $userId . '_') === 0) {
-            $file_path = $dir . $filename;
-            $jsonData = file_get_contents($file_path);
-            $userData = json_decode($jsonData, true);
-
-            // User data.
-            if (!isset($userData[$chat_id])) {
-                $userData[$chat_id] = [];
+    
+    // Make sure data directory exists
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+    
+    // Find existing file for this user or create filename for new file
+    $filename = null;
+    if (is_dir($dir)) {
+        $files = scandir($dir);
+        if ($files !== false) {
+            foreach ($files as $file) {
+                if (strpos($file, $userId . '_') === 0) {
+                    $filename = $dir . $file;
+                    break;
+                }
             }
-            $userData[$chat_id][$key] = $value;
-
-            // Save data back to file.
-            $jsonData = json_encode($userData);
-            file_put_contents($file_path, $jsonData);
-
-            return;
         }
     }
-
-    // File wasn`t find, new file created.
-    $filename = "data/{$userId}_" . gmdate("G-j-n-Y") . ".json";
-    $userData = [$chat_id => [$key => $value]];
+    
+    // If no existing file found, create a new filename
+    if ($filename === null) {
+        $filename = "data/{$userId}_" . gmdate("G-j-n-Y", time()) . ".json";
+    }
+    
+    // Load existing data or create new data structure
+    $userData = [];
+    if (file_exists($filename)) {
+        $jsonData = file_get_contents($filename);
+        if ($jsonData !== false) {
+            $userData = json_decode($jsonData, true);
+            if (!is_array($userData)) {
+                $userData = [];
+            }
+        }
+    }
+    
+    // Update user data
+    if (!isset($userData[$chat_id])) {
+        $userData[$chat_id] = [];
+    }
+    $userData[$chat_id][$key] = $value;
+    
+    // Save data back to file
     $jsonData = json_encode($userData);
     file_put_contents($filename, $jsonData);
 }
@@ -240,7 +272,7 @@ if (!empty($callbackData)) {
     if ($telegram->Callback_Query()) {
         $callbackData = $telegram->Callback_Data();
 
-        if (strpos($callbackData, 'age_') === 0) {
+        if ($callbackData && strpos($callbackData, 'age_') === 0) {
 
             $age = $callbackData;
             $ageFormated = substr($age, 4);
@@ -428,7 +460,7 @@ if (!empty($callbackData)) {
     if (!empty($callbackData)) {
         $chat_id = $telegram->Callback_ChatID();
 
-        if (strpos($callbackData, 'duration_') === 0) {
+        if ($callbackData && strpos($callbackData, 'duration_') === 0) {
             $durationNum = substr($callbackData, 9);
 
             $content = [
@@ -475,7 +507,7 @@ if (!empty($callbackData)) {
     }
 
     $chat_id = $telegram->Callback_ChatID();
-    if (strpos($callbackData, 'cur_') === 0) {
+    if ($callbackData && strpos($callbackData, 'cur_') === 0) {
         if ($callbackData === 'cur_hrivnya') {
             $currencyName = 'Гривня';
         } else {
@@ -728,7 +760,7 @@ if (!empty($callbackData)) {
     }
 }
 
-if (strpos($callbackData, 'sum_') === 0) {
+if ($callbackData && strpos($callbackData, 'sum_') === 0) {
     $summ = $callbackData;
     $chat_id = $telegram->Callback_ChatID();
     $summName = substr($callbackData, 4);
@@ -799,8 +831,8 @@ $update = json_decode(file_get_contents("php://input"), true);
 if (isset($update["callback_query"])) {
     $fromCallbackQuery = true;
     $callbackQuery = $update["callback_query"];
-    $callbackData = $callbackQuery["data"];
-    $callbackChatId = $callbackQuery["message"]["chat"]["id"];
+    $callbackData = isset($callbackQuery["data"]) ? $callbackQuery["data"] : '';
+    $callbackChatId = isset($callbackQuery["message"]["chat"]["id"]) ? $callbackQuery["message"]["chat"]["id"] : '';
 
     if ($callbackData === 'calculation') {
         // Insurance calc.
@@ -813,15 +845,17 @@ if (isset($update["callback_query"])) {
         ];
 
         $response = $telegram->sendAnimation($content);
-        $messageIdToDelete = $response['result']['message_id'];
+        $messageIdToDelete = isset($response['result']['message_id']) ? $response['result']['message_id'] : null;
 
         // delay callback.
         usleep(6000000);
 
-        $telegram->deleteMessage([
-            'chat_id' => $chat_id,
-            'message_id' => $messageIdToDelete
-        ]);
+        if ($messageIdToDelete !== null) {
+            $telegram->deleteMessage([
+                'chat_id' => $chat_id,
+                'message_id' => $messageIdToDelete
+            ]);
+        }
 
         $content = [
             'chat_id' => $chat_id,
@@ -835,13 +869,15 @@ if (isset($update["callback_query"])) {
         $result = ($durationNumJson * $summNameJson);
 
         // Add condition for $result.
-        if ($stateNameJson === 'Жiноча') {
-            $result *= 1.0;
-        } elseif ($stateNameJson === 'Чоловiча') {
-            $result *= 0.88044;
+        if (!empty($stateNameJson)) {
+            if ($stateNameJson === 'Жiноча') {
+                $result *= 1.0;
+            } elseif ($stateNameJson === 'Чоловiча') {
+                $result *= 0.88044;
+            }
         }
 
-        if ($currencyNameJson === 'Доллар США') {
+        if (!empty($currencyNameJson) && $currencyNameJson === 'Доллар США') {
             switch ($ageFormatedJson) {
                 case 15:
                     $coef = 1;
@@ -1182,15 +1218,21 @@ if (isset($update["callback_query"])) {
 
         // Delete JSON file.
         $files = glob('data/' . $userId . '*.json');
-        foreach ($files as $file) {
-            unlink($file);
+        if (is_array($files)) {
+            foreach ($files as $file) {
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+            }
         }
     }
 
     // CallbackQuery response.
-    $telegram->answerCallbackQuery([
-        'callback_query_id' => $callbackQuery['id'],
-        'text' => '',
-        'show_alert' => false,
-    ]);
+    if (isset($callbackQuery['id'])) {
+        $telegram->answerCallbackQuery([
+            'callback_query_id' => $callbackQuery['id'],
+            'text' => '',
+            'show_alert' => false,
+        ]);
+    }
 }
